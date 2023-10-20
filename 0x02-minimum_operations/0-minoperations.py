@@ -1,14 +1,20 @@
 #!/usr/bin/python3
 def minOperations(n):
-    if n <= 1:
+    """Calculates the fewest number of operations"""
+    if n == 1:
         return 0
 
-    dp = [0] * (n + 1)
+    operations = 0
+    current_h = 1
+    clipboard = 0
 
-    for i in range(2, n + 1):
-        dp[i] = i
-        for j in range(2, i):
-            if i % j == 0:
-                dp[i] = min(dp[i], dp[j] + i // j)
+    while current_h < n:
+        if n % current_h == 0:
+            clipboard = current_h
+            current_h *= 2
+            operations += 2
+        else:
+            current_h += clipboard
+            operations += 1
 
-    return dp[n]
+    return operations if current_h == n else 0

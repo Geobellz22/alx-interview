@@ -2,41 +2,40 @@
 """Reads stdin line by line and computes metrics"""
 
 import sys
-import signal
 
-status_codes = {'200': 0, '301': 0, '400': 0, '401': 0,
-                '403': 0, '404': 0, '405': 0, '500': 0}
+
+status_codes = {"200": 0, "301": 0, "400": 0, "401": 0,
+                "403": 0, "404": 0, "405": 0, "500": 0}
+counter = 0
 total_size = 0
-line_count = 0
+
+try:
+    for line in sys.stdin:
+        line_items = line.split(" ")
+        if len(line_items) > 4:
+            status_code = line_items[-2]
+            file_size = line_items[-1]
+            if status_code in status_codes:
+                status_codes[status_code] += 1
+            total_size += int(file_size)
+            counter += 1
+
+        if counter == 10:
+            counter = 0
+            print(f"File size: {total_size}")
+            for key, value in sorted(status_codes.items()):
+                if value != 0:
+                    print(f"{key}: {value}")
+
+except KeyboardInterrupt:
+    print(f"File size: {total_size}")
+    for key, value in sorted(status_codes.items()):
+        if value != 0:
+            print(f"{key}: {value}")
 
 
-def print_statistics(signal, frame):
-    global line_count
-    global total_size
-    global status_codes
-
-    print("File size: {0}".format(total_size))
-    for code in sorted(status_codes):
-        if status_codes[code] > 0:
-            print("{0}: {1}".format(code, status_codes[code]))
-    line_count = 0
-    status_codes = dict.fromkeys(status_codes, 0)
-    total_size = 0
-
-
-signal.signal(signal.SIGINT, print_statistics)
-
-for line in sys.stdin:
-    parts = line.split(' ')
-    if len(parts) >= 7:
-        status_code = parts[-2]
-        size = parts[-1]
-        if status_code in status_codes:
-            status_codes[status_code] += 1
-        if size.isdigit():
-            total_size += int(size)
-        line_count += 1
-    if line_count >= 10:
-        print_statistics(None, None)
-
-print_statistics(None, None)
+finally:
+    print(f"File size: {total_size}")
+    for key, value in sorted(status_codes.items()):
+        if value != 0:
+            print(f"{key}: {value}")

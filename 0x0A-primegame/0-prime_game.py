@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""Island perimeter computing module.
+"""
+Island perimeter computing module.
 """
 
 
@@ -17,7 +18,7 @@ def isWinner(x, nums):
 
     Notes:
     - Assumes Maria always goes first and both players play optimally.
-    - Rounds are played by choosing prime numbers and removing them and their multiples.
+    - Rounds are played by choosing prime numbers
 
     Constraints:
     - n and x will not be larger than 10000.
@@ -33,12 +34,6 @@ def isWinner(x, nums):
     def is_prime(num):
         """
         Check if a number is prime.
-
-        Args:
-        - num (int): Number to check.
-
-        Returns:
-        - bool: True if the number is prime, False otherwise.
         """
         if num < 2:
             return False
@@ -50,13 +45,6 @@ def isWinner(x, nums):
     def find_next_prime(start, nums):
         """
         Find the next prime number in a list.
-
-        Args:
-        - start (int): Number to start searching from.
-        - nums (list): List of numbers to search.
-
-        Returns:
-        - int: Next prime number in the list, or None if not found.
         """
         for num in nums:
             if num > start and is_prime(num):
@@ -66,12 +54,6 @@ def isWinner(x, nums):
     def play_round(nums):
         """
         Simulate a round of the prime number removal game.
-
-        Args:
-        - nums (list): List of numbers to play the round with.
-
-        Returns:
-        - str: Name of the winner of the round ('Maria' or 'Ben').
         """
         maria_turn = True
         while True:
